@@ -4,6 +4,8 @@
 <title>Staff · អាវសង្ក្រាន្ត ២០២៧</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta charset="utf-8">
+<link rel="preconnect" href="https://script.google.com">
+<link rel="preconnect" href="https://script.googleusercontent.com">
 <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root { --red:#b3261e; --red-d:#8c1d17; --gold:#e8a917; --ink:#1f1b16; --mute:#6b635a; --line:#e7dfd3; --bg:#fbf6ee; --ok:#2e7d32; --ok-bg:#e3f4e6; --warn-bg:#fff4d6; --warn:#8a5a00; --bad-bg:#fde7e5; }
@@ -130,7 +132,9 @@
   Object.defineProperty(google.script, 'run', { get: function () { return new Runner(); } });
 </script>
 <script>
+function pristine() { return !document.getElementById('login').classList.contains('hide') && !document.getElementById('pin').value; }
 function boot(CFG) {
+  document.getElementById('chips').innerHTML = '';
   var ST = CFG.status, pin = '', who = '', role = '', orders = [], filter = 'todo', busy = false, armed = null;
   var $ = function (id) { return document.getElementById(id); };
   function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
@@ -252,15 +256,17 @@ function boot(CFG) {
   $('btnRefresh').onclick = function () { $('errMain').textContent = ''; load(false); };
   setInterval(function () { if (pin && role && !busy && !armed) load(true); }, 30000);
 }
-  call('config', []).then(function (cfg) {
+  // ការកំណត់ដែលភ្ជាប់ក្នុងទំព័រ → បង្ហាញភ្លាមៗ (មិនចាំ Google) រួចផ្ទៀងជាមួយ Sheet នៅខាងក្រោយ
+  var CFG0 = {"eventName": "ចុះឈ្មោះទិញអាវសង្ក្រាន្ត ២០២៧", "price": 5, "currency": "USD", "sizes": ["S", "M", "L", "XL"], "maxQty": 20, "merchantName": "SIREY KUN HOUT", "contact": "", "expireMinutes": 30, "staticQr": true, "abaLink": "https://pay.ababank.com/oRF8/mdboeivh", "status": {"PENDING": "រង់ចាំបង់ប្រាក់", "REVIEW": "រង់ចាំផ្ទៀងផ្ទាត់", "PAID": "បានបង់រួច", "CANCEL": "បោះបង់"}};
+  function start(cfg) {
     document.getElementById('loading').classList.add('hide');
     document.getElementById('login').classList.remove('hide');
     boot(cfg);
-  }, function () {
-    var l = document.getElementById('loading');
-    l.textContent = 'មិនអាចភ្ជាប់បានទេ។ សូមពិនិត្យអ៊ីនធឺណិត រួចចុចទីនេះដើម្បីព្យាយាមម្តងទៀត';
-    l.style.cursor = 'pointer'; l.onclick = function () { location.reload(); };
-  });
+  }
+  start(CFG0);
+  call('config', []).then(function (cfg) {
+    if (JSON.stringify(cfg) !== JSON.stringify(CFG0) && pristine()) start(cfg);
+  }, function () {});
 </script>
 </body>
 </html>
