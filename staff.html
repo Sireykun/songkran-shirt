@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+<title>Staff · អាវសង្ក្រាន្ត ២០២៧</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --red:#b3261e; --red-d:#8c1d17; --gold:#e8a917; --ink:#1f1b16; --mute:#6b635a; --line:#e7dfd3; --bg:#fbf6ee; --ok:#2e7d32; --ok-bg:#e3f4e6; --warn-bg:#fff4d6; --warn:#8a5a00; --bad-bg:#fde7e5; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:'Kantumruy Pro','Khmer OS Battambang',sans-serif; background:var(--bg); color:var(--ink); line-height:1.55; }
+  .wrap { max-width:560px; margin:0 auto; padding:0 14px 40px; }
+  header { background:linear-gradient(135deg,var(--red),var(--red-d)); color:#fff; padding:18px 16px; border-bottom:4px solid var(--gold); }
+  header .in { max-width:560px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:10px; }
+  header h1 { margin:0; font-size:18px; font-weight:700; }
+  header p { margin:2px 0 0; font-size:13px; opacity:.9; }
+  header button { font:inherit; font-size:14px; font-weight:600; color:#fff; background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.5); border-radius:10px; padding:8px 12px; cursor:pointer; white-space:nowrap; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:14px; padding:16px; margin-top:14px; }
+  h2 { font-size:15px; margin:0 0 10px; color:var(--red-d); }
+  label { display:block; font-size:14px; font-weight:600; margin:12px 0 4px; }
+  input[type=text], input[type=password], input[type=search] { width:100%; font:inherit; font-size:16px; padding:11px 12px; border:1.5px solid var(--line); border-radius:10px; background:#fff; }
+  input:focus { outline:none; border-color:var(--red); }
+  .btn { display:block; width:100%; margin-top:14px; padding:13px; font:inherit; font-size:16px; font-weight:700; color:#fff; background:var(--red); border:0; border-radius:12px; cursor:pointer; }
+  .btn:disabled { opacity:.5; }
+  .err { color:var(--red); font-size:14px; margin-top:10px; min-height:1em; }
+  .tiles { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-top:14px; }
+  .tile { background:#fff; border:1px solid var(--line); border-radius:14px; padding:12px 14px; }
+  .tile .k { font-size:13px; color:var(--mute); }
+  .tile .v { font-size:28px; font-weight:700; line-height:1.2; }
+  .tile.todo .v { color:var(--red-d); }
+  .tile.done .v { color:var(--ok); }
+  table.sz { width:100%; border-collapse:collapse; font-size:15px; }
+  table.sz th { text-align:right; font-size:12.5px; font-weight:600; color:var(--mute); padding:4px 0; border-bottom:1.5px solid var(--ink); }
+  table.sz th:first-child, table.sz td:first-child { text-align:left; font-weight:700; }
+  table.sz td { text-align:right; padding:7px 0; border-bottom:1px dashed var(--line); font-variant-numeric:tabular-nums; }
+  table.sz td.rem { font-weight:700; color:var(--red-d); }
+  .chips { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+  .chip { font:inherit; font-size:13.5px; padding:6px 11px; border-radius:999px; border:1.5px solid var(--line); background:#fff; color:var(--ink); cursor:pointer; }
+  .chip.on { background:var(--ink); border-color:var(--ink); color:#fff; }
+  .o { border:1.5px solid var(--line); border-radius:14px; padding:14px; margin-top:10px; background:#fff; }
+  .o.paid { border-color:#9bd0a1; }
+  .o.given { background:#f4f4f1; }
+  .o .top { display:flex; justify-content:space-between; align-items:flex-start; gap:8px; }
+  .o .id { font-size:20px; font-weight:700; font-family:Arial,sans-serif; }
+  .o .nm { font-size:16px; font-weight:600; }
+  .o .ph { font-size:14px; color:var(--mute); }
+  .badge { font-size:12.5px; font-weight:700; padding:4px 9px; border-radius:999px; white-space:nowrap; }
+  .badge.paid { background:var(--ok-bg); color:var(--ok); }
+  .badge.review { background:var(--warn-bg); color:var(--warn); }
+  .badge.other { background:#eee; color:#555; }
+  .badge.cancel { background:var(--bad-bg); color:var(--red-d); }
+  .szs { display:flex; gap:6px; flex-wrap:wrap; margin:10px 0 2px; }
+  .szs span { font-family:Arial,sans-serif; font-size:17px; font-weight:700; border:1.5px solid var(--ink); border-radius:8px; padding:3px 10px; }
+  .o .meta { font-size:13px; color:var(--mute); margin-top:6px; word-break:break-word; }
+  .o .meta a { color:var(--red-d); }
+  .o .stop { margin-top:10px; padding:9px 12px; border-radius:10px; font-size:14px; font-weight:600; background:var(--bad-bg); color:var(--red-d); }
+  .o .givenLine { margin-top:10px; padding:9px 12px; border-radius:10px; font-size:14px; font-weight:600; background:var(--ok-bg); color:var(--ok); }
+  .o .acts { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+  .o .acts button { flex:1 1 auto; font:inherit; font-size:15px; font-weight:700; padding:11px 12px; border-radius:10px; border:0; cursor:pointer; color:#fff; background:var(--ok); }
+  .o .acts button.sec { background:#fff; color:var(--ink); border:1.5px solid var(--line); font-weight:600; flex:0 1 auto; }
+  .o .acts button.arm { background:var(--gold); color:#1f1b16; }
+  .o .acts button:disabled { opacity:.5; }
+  .empty { text-align:center; color:var(--mute); padding:22px 0 6px; font-size:14.5px; }
+  .hide { display:none; }
+  .small { font-size:12.5px; color:var(--mute); text-align:center; margin-top:14px; }
+</style>
+</head>
+<body>
+<header><div class="in">
+  <div><h1>ផ្ទៀងផ្ទាត់ និងប្រគល់អាវ</h1><p id="sub"></p></div>
+  <button id="btnRefresh" class="hide">ផ្ទុកឡើងវិញ</button>
+</div></header>
+
+<div class="wrap">
+  <!-- ចូលប្រើ -->
+  <div class="card" id="loading" style="text-align:center">កំពុងផ្ទុក…</div>
+  <section id="login" class="hide">
+    <div class="card">
+      <h2>ចូលប្រើសម្រាប់បុគ្គលិក</h2>
+      <label for="who">ឈ្មោះរបស់អ្នក</label>
+      <input id="who" type="text" maxlength="40" autocomplete="name">
+      <label for="pin">PIN</label>
+      <input id="pin" type="password" inputmode="numeric" maxlength="12" autocomplete="off">
+      <div class="err" id="errLogin"></div>
+      <button class="btn" id="btnLogin">ចូល</button>
+    </div>
+  </section>
+
+  <!-- Dashboard -->
+  <section id="main" class="hide">
+    <div class="tiles">
+      <div class="tile todo"><div class="k">ត្រូវប្រគល់ (បានបង់ មិនទាន់យក)</div><div class="v" id="tTodo">0</div></div>
+      <div class="tile done"><div class="k">បានប្រគល់រួច</div><div class="v" id="tGiven">0</div></div>
+      <div class="tile"><div class="k">បានបង់សរុប</div><div class="v" id="tPaid">0</div></div>
+      <div class="tile"><div class="k">រង់ចាំផ្ទៀងផ្ទាត់ការបង់</div><div class="v" id="tReview">0</div></div>
+    </div>
+
+    <div class="card">
+      <h2>ចំនួនអាវតាមទំហំ</h2>
+      <table class="sz"><thead><tr><th>ទំហំ</th><th>បានបង់</th><th>បានប្រគល់</th><th>នៅសល់ត្រូវប្រគល់</th></tr></thead><tbody id="szBody"></tbody></table>
+    </div>
+
+    <div class="card">
+      <h2>ស្វែងរកកម្មង់</h2>
+      <input id="q" type="search" placeholder="លេខកម្មង់ លេខទូរស័ព្ទ ឬឈ្មោះ" autocomplete="off">
+      <div class="chips" id="chips"></div>
+      <div class="err" id="errMain"></div>
+      <div id="list"></div>
+    </div>
+    <p class="small" id="stamp"></p>
+  </section>
+</div>
+
+<script>
+  // ── ភ្ជាប់ទៅ Google Apps Script ជា API (មិនប្រើ cookie របស់ Google → ដំណើរការលើគ្រប់ទូរស័ព្ទ)
+  var API = 'https://script.google.com/macros/s/AKfycbxap0BuOUWiasA7EZJQ3gPk3uh7zK6jOHW0fBiKZAY4loJEIqA2WoysicgdtXD9aybvZw/exec';
+  function call(action, args) {
+    return fetch(API, { method: 'POST', redirect: 'follow', credentials: 'omit',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: action, args: args || [] }) })
+      .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .then(function (j) { if (!j || !j.ok) throw new Error((j && j.error) || 'មានបញ្ហា សូមព្យាយាមម្តងទៀត'); return j.data; });
+  }
+  function Runner() { this.s = function () {}; this.f = function () {}; }
+  Runner.prototype.withSuccessHandler = function (f) { this.s = f; return this; };
+  Runner.prototype.withFailureHandler = function (f) { this.f = f; return this; };
+  ['submitOrder', 'uploadReceipt', 'staffList', 'staffAction'].forEach(function (n) {
+    Runner.prototype[n] = function () { var a = [].slice.call(arguments), t = this; call(n, a).then(function (d) { t.s(d); }, function (e) { t.f(e); }); };
+  });
+  var google = { script: {} };
+  Object.defineProperty(google.script, 'run', { get: function () { return new Runner(); } });
+</script>
+<script>
+function boot(CFG) {
+  var ST = CFG.status, pin = '', who = '', role = '', orders = [], filter = 'todo', busy = false, armed = null;
+  var $ = function (id) { return document.getElementById(id); };
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  function cleanErr(e) { return String((e && e.message) || e).replace(/^Error:\s*/, ''); }
+  function store(k, v) { try { if (v === undefined) return window.sessionStorage.getItem(k) || ''; window.sessionStorage.setItem(k, v); } catch (e) { return ''; } }
+
+  $('sub').textContent = CFG.eventName;
+  $('who').value = store('who');
+
+  var FILTERS = [['todo', 'ត្រូវប្រគល់'], ['review', 'រង់ចាំផ្ទៀងផ្ទាត់'], ['given', 'បានប្រគល់'], ['all', 'ទាំងអស់']];
+  FILTERS.forEach(function (f) {
+    var b = el('button', 'chip', f[1]); b.type = 'button'; b.setAttribute('data-f', f[0]);
+    b.onclick = function () { filter = f[0]; render(); };
+    $('chips').appendChild(b);
+  });
+
+  function isPaid(o) { return o.status === ST.PAID; }
+  function kind(o) { return o.status === ST.CANCEL ? 'cancel' : (isPaid(o) ? (o.given ? 'given' : 'todo') : (o.status === ST.REVIEW ? 'review' : 'other')); }
+
+  function apply(res) {
+    role = res.role; orders = res.orders; armed = null;
+    $('login').classList.add('hide'); $('main').classList.remove('hide'); $('btnRefresh').classList.remove('hide');
+    $('sub').textContent = CFG.eventName + ' · ' + who + (role === 'admin' ? ' (អ្នកគ្រប់គ្រង)' : '');
+    var d = new Date();
+    $('stamp').textContent = 'ទិន្នន័យចុងក្រោយ ' + ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2) + ':' + ('0' + d.getSeconds()).slice(-2);
+    render();
+  }
+
+  function render() {
+    var c = { todo: 0, given: 0, paid: 0, review: 0 }, sz = CFG.sizes.map(function () { return [0, 0]; });
+    orders.forEach(function (o) {
+      var k = kind(o);
+      if (k === 'todo' || k === 'given') { c.paid++; c[k]++; o.qtys.forEach(function (n, i) { if (sz[i]) { sz[i][0] += n; if (k === 'given') sz[i][1] += n; } }); }
+      if (k === 'review') c.review++;
+    });
+    $('tTodo').textContent = c.todo; $('tGiven').textContent = c.given; $('tPaid').textContent = c.paid; $('tReview').textContent = c.review;
+    $('szBody').innerHTML = '';
+    var tot = [0, 0];
+    CFG.sizes.forEach(function (s, i) {
+      var tr = el('tr'); tr.appendChild(el('td', '', s)); tr.appendChild(el('td', '', sz[i][0])); tr.appendChild(el('td', '', sz[i][1])); tr.appendChild(el('td', 'rem', sz[i][0] - sz[i][1]));
+      $('szBody').appendChild(tr); tot[0] += sz[i][0]; tot[1] += sz[i][1];
+    });
+    var tr = el('tr'); tr.appendChild(el('td', '', 'សរុប')); tr.appendChild(el('td', '', tot[0])); tr.appendChild(el('td', '', tot[1])); tr.appendChild(el('td', 'rem', tot[0] - tot[1]));
+    $('szBody').appendChild(tr);
+
+    Array.prototype.forEach.call($('chips').children, function (b) { b.classList.toggle('on', b.getAttribute('data-f') === filter); });
+
+    var q = $('q').value.trim().toLowerCase(), qd = q.replace(/\D/g, '');
+    var hits = orders.filter(function (o) {
+      if (q) {
+        var idn = String(parseInt(o.id.replace(/\D/g, ''), 10));
+        return o.id.toLowerCase().indexOf(q) >= 0 || (qd && (idn === String(parseInt(qd, 10)) || o.phone.indexOf(qd) >= 0)) || o.name.toLowerCase().indexOf(q) >= 0;
+      }
+      return filter === 'all' || kind(o) === filter;
+    });
+    var list = $('list'); list.innerHTML = '';
+    if (!hits.length) { list.appendChild(el('div', 'empty', q ? 'រកមិនឃើញកម្មង់នេះទេ' : 'គ្មានកម្មង់ក្នុងបញ្ជីនេះ')); return; }
+    hits.slice(0, 60).forEach(function (o) { list.appendChild(card(o)); });
+    if (hits.length > 60) list.appendChild(el('div', 'empty', 'បង្ហាញ 60 នៃ ' + hits.length + ' — សូមស្វែងរកដើម្បីបង្រួម'));
+  }
+
+  function card(o) {
+    var k = kind(o), box = el('div', 'o' + (isPaid(o) ? ' paid' : '') + (k === 'given' ? ' given' : ''));
+    var top = el('div', 'top'), left = el('div');
+    left.appendChild(el('div', 'id', o.id)); left.appendChild(el('div', 'nm', o.name)); left.appendChild(el('div', 'ph', o.phone));
+    top.appendChild(left);
+    top.appendChild(el('span', 'badge ' + (isPaid(o) ? 'paid' : k), o.status || '—'));
+    box.appendChild(top);
+    var szs = el('div', 'szs');
+    CFG.sizes.forEach(function (s, i) { if (o.qtys[i] > 0) szs.appendChild(el('span', '', s + ' × ' + o.qtys[i])); });
+    box.appendChild(szs);
+    var meta = el('div', 'meta', o.totalQty + ' អាវ · ' + o.amount + ' ' + o.currency + ' · ' + o.time + (o.note ? ' · ' + o.note : ''));
+    if (o.receipt && o.receipt !== 'yes' && /^https:\/\//.test(o.receipt)) { meta.appendChild(document.createTextNode(' · ')); var a = el('a', '', 'មើលវិក័យបត្រ'); a.href = o.receipt; a.target = '_blank'; a.rel = 'noopener'; meta.appendChild(a); }
+    box.appendChild(meta);
+
+    if (k === 'given') box.appendChild(el('div', 'givenLine', 'បានប្រគល់អាវរួច · ' + o.given + (o.givenBy ? ' · ' + o.givenBy : '')));
+    else if (k !== 'todo') box.appendChild(el('div', 'stop', k === 'cancel' ? 'កម្មង់នេះត្រូវបានបោះបង់ — កុំប្រគល់អាវ' : 'មិនទាន់បញ្ជាក់ថាបានបង់ប្រាក់ — កុំប្រគល់អាវ'));
+
+    var acts = el('div', 'acts');
+    function btn(label, action, cls) {
+      var key = o.id + ':' + action, b = el('button', (cls || '') + (armed === key ? ' arm' : ''), armed === key ? 'ចុចម្តងទៀតដើម្បីបញ្ជាក់' : label);
+      b.type = 'button'; b.disabled = busy;
+      b.onclick = function () { if (armed !== key) { armed = key; render(); return; } act(o.id, action); };
+      acts.appendChild(b);
+    }
+    if (k === 'todo') btn('ប្រគល់អាវ', 'give');
+    if (role === 'admin') {
+      if (k === 'review' || k === 'other') btn('បញ្ជាក់ថាបានបង់', 'paid');
+      if (k === 'given') btn('លុបការប្រគល់', 'ungive', 'sec');
+      if (k === 'review' || k === 'other') btn('បោះបង់', 'cancel', 'sec');
+    }
+    if (acts.children.length) box.appendChild(acts);
+    return box;
+  }
+
+  function fail(e) { busy = false; $('errMain').textContent = cleanErr(e); render(); }
+  function act(id, action) {
+    busy = true; armed = null; $('errMain').textContent = ''; render();
+    google.script.run.withSuccessHandler(function (res) { busy = false; apply(res); }).withFailureHandler(function (e) { fail(e); load(true); })
+      .staffAction(pin, id, action, who);
+  }
+  function load(quiet) {
+    google.script.run.withSuccessHandler(function (res) { if (!busy) apply(res); })
+      .withFailureHandler(function (e) { if (!quiet) fail(e); }).staffList(pin);
+  }
+
+  $('btnLogin').onclick = function () {
+    who = $('who').value.trim(); pin = $('pin').value.trim();
+    $('errLogin').textContent = '';
+    if (who.length < 2) { $('errLogin').textContent = 'សូមបញ្ចូលឈ្មោះរបស់អ្នក'; return; }
+    if (!pin) { $('errLogin').textContent = 'សូមបញ្ចូល PIN'; return; }
+    var b = this; b.disabled = true; b.textContent = 'កំពុងពិនិត្យ…';
+    google.script.run.withSuccessHandler(function (res) { store('who', who); apply(res); })
+      .withFailureHandler(function (e) { $('errLogin').textContent = cleanErr(e); b.disabled = false; b.textContent = 'ចូល'; })
+      .staffList(pin);
+  };
+  $('pin').onkeydown = function (e) { if (e.key === 'Enter') $('btnLogin').click(); };
+  $('q').oninput = function () { armed = null; render(); };
+  $('btnRefresh').onclick = function () { $('errMain').textContent = ''; load(false); };
+  setInterval(function () { if (pin && role && !busy && !armed) load(true); }, 30000);
+}
+  call('config', []).then(function (cfg) {
+    document.getElementById('loading').classList.add('hide');
+    document.getElementById('login').classList.remove('hide');
+    boot(cfg);
+  }, function () {
+    var l = document.getElementById('loading');
+    l.textContent = 'មិនអាចភ្ជាប់បានទេ។ សូមពិនិត្យអ៊ីនធឺណិត រួចចុចទីនេះដើម្បីព្យាយាមម្តងទៀត';
+    l.style.cursor = 'pointer'; l.onclick = function () { location.reload(); };
+  });
+</script>
+</body>
+</html>

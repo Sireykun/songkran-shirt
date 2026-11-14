@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+<title>ចុះឈ្មោះទិញអាវសង្ក្រាន្ត ២០២៧</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --red:#b3261e; --red-d:#8c1d17; --gold:#e8a917; --ink:#1f1b16; --mute:#6b635a; --line:#e7dfd3; --bg:#fbf6ee; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:'Kantumruy Pro','Khmer OS Battambang',sans-serif; background:var(--bg); color:var(--ink); line-height:1.6; }
+  .wrap { max-width:480px; margin:0 auto; padding:0 16px 40px; }
+  header { background:linear-gradient(135deg,var(--red),var(--red-d)); color:#fff; padding:28px 20px 24px; text-align:center; border-bottom:4px solid var(--gold); }
+  header h1 { margin:0; font-size:22px; font-weight:700; }
+  header p { margin:6px 0 0; font-size:15px; opacity:.92; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:14px; padding:18px; margin-top:16px; }
+  h2 { font-size:16px; margin:0 0 12px; color:var(--red-d); }
+  label { display:block; font-size:14px; font-weight:600; margin:12px 0 4px; }
+  label:first-of-type { margin-top:0; }
+  input[type=text], input[type=tel], textarea { width:100%; font:inherit; font-size:16px; padding:11px 12px; border:1.5px solid var(--line); border-radius:10px; background:#fff; }
+  input:focus, textarea:focus { outline:none; border-color:var(--red); }
+  .size-row { display:flex; align-items:center; justify-content:space-between; padding:9px 0; border-bottom:1px dashed var(--line); }
+  .size-row:last-child { border-bottom:0; }
+  .size-name { font-weight:700; font-size:17px; min-width:56px; }
+  .stepper { display:flex; align-items:center; gap:6px; }
+  .stepper button { width:40px; height:40px; border-radius:10px; border:1.5px solid var(--line); background:#fff; font-size:22px; line-height:1; color:var(--red-d); cursor:pointer; }
+  .stepper button:active { background:#f6ece0; }
+  .stepper span { min-width:34px; text-align:center; font-size:18px; font-weight:700; }
+  .total { display:flex; justify-content:space-between; align-items:baseline; margin-top:14px; padding-top:12px; border-top:2px solid var(--ink); }
+  .total b { font-size:24px; color:var(--red-d); }
+  .btn { display:block; width:100%; margin-top:16px; padding:14px; font:inherit; font-size:17px; font-weight:700; color:#fff; background:var(--red); border:0; border-radius:12px; cursor:pointer; }
+  .btn:disabled { opacity:.5; }
+  a.btn { text-align:center; text-decoration:none; }
+  .btn.aba { background:#005d7b; }
+  .btn.ghost { background:#fff; color:var(--red-d); border:1.5px solid var(--red); }
+  .err { color:var(--red); font-size:14px; margin-top:10px; min-height:1em; }
+  .notice { background:#fff4d6; border:1px solid #e8a917; border-radius:10px; padding:10px 12px; font-size:15px; font-weight:600; text-align:center; margin:12px 0 0; }
+  .tk { width:100%; border-collapse:collapse; font-size:15px; }
+  .tk td { padding:7px 0; border-bottom:1px dashed var(--line); vertical-align:top; }
+  .tk td:first-child { color:var(--mute); width:38%; }
+  .tk td:last-child { font-weight:600; text-align:right; word-break:break-word; }
+  .hide { display:none; }
+  /* KHQR card */
+  .khqr { width:270px; margin:6px auto 0; border-radius:16px; overflow:hidden; background:#fff; box-shadow:0 4px 18px rgba(0,0,0,.14); }
+  .khqr-head { background:#e1232e; color:#fff; font-weight:700; letter-spacing:2px; text-align:center; padding:10px; font-family:Arial,sans-serif; font-size:18px; }
+  .khqr-body { padding:14px 22px 6px; border-bottom:1px dashed #bbb; }
+  .khqr-name { font-size:13px; font-family:Arial,sans-serif; }
+  .khqr-amt { font-size:24px; font-weight:700; font-family:Arial,sans-serif; }
+  .khqr-amt small { font-size:13px; font-weight:400; margin-left:4px; }
+  #qr { padding:18px 0 20px; display:flex; justify-content:center; }
+  #qr img, #qr canvas { width:210px; height:210px; }
+  ol { padding-left:28px; margin:8px 0 0; font-size:14.5px; }
+  .meta { font-size:14px; color:var(--mute); text-align:center; margin-top:10px; }
+  .ok { text-align:center; padding:10px 0; }
+  .ok .tick { width:64px; height:64px; border-radius:50%; background:#2e7d32; color:#fff; font-size:36px; line-height:64px; margin:0 auto 10px; }
+  footer { text-align:center; font-size:13px; color:var(--mute); margin-top:20px; }
+</style>
+</head>
+<body>
+<header>
+  <h1 id="title"></h1>
+  <p id="priceLine"></p>
+</header>
+
+<div class="wrap">
+
+  <!-- ជំហាន ១៖ បំពេញព័ត៌មាន -->
+  <div class="card" id="loading" style="text-align:center">កំពុងផ្ទុក…</div>
+  <section id="step1" class="hide">
+    <div class="card">
+      <h2>១. ព័ត៌មានអ្នកកម្មង់</h2>
+      <label for="name">ឈ្មោះ</label>
+      <input id="name" type="text" autocomplete="name" maxlength="80">
+      <label for="phone">លេខទូរស័ព្ទ</label>
+      <input id="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="15" placeholder="012 345 678">
+      <label for="note">កំណត់ចំណាំ (បើមាន)</label>
+      <textarea id="note" rows="2" maxlength="300"></textarea>
+    </div>
+
+    <div class="card">
+      <h2>២. ជ្រើសរើសទំហំ និងចំនួន</h2>
+      <div id="sizes"></div>
+      <div class="total"><span>សរុប <span id="totalQty">0</span> អាវ</span><b id="totalAmt"></b></div>
+    </div>
+
+    <div class="err" id="err1"></div>
+    <button class="btn" id="btnSubmit">បន្តទៅបង់ប្រាក់</button>
+  </section>
+
+  <!-- ជំហាន ២៖ បង់ប្រាក់តាម KHQR -->
+  <section id="step2" class="hide">
+    <div class="card">
+      <h2>៣. បង់ប្រាក់តាម KHQR</h2>
+      <div class="khqr" id="khqrCard">
+        <div class="khqr-head">KHQR</div>
+        <div class="khqr-body">
+          <div class="khqr-name" id="mName"></div>
+          <div class="khqr-amt"><span id="mAmt"></span><small id="mCur"></small></div>
+        </div>
+        <div id="qr"></div>
+      </div>
+      <p class="meta">លេខកម្មង់ <b id="orderId"></b> · <span id="orderQty"></span> អាវ<br><span id="expLine">QR នេះមានសុពលភាព <span id="expMin"></span> នាទី</span></p>
+      <p class="notice hide" id="staticNote"></p>
+      <a class="btn aba hide" id="btnAba" target="_blank" rel="noopener">បង់តាម ABA Mobile</a>
+      <button class="btn ghost" id="btnSave">រក្សាទុករូប QR</button>
+      <ol>
+        <li>អ្នកប្រើ ABA៖ ចុច «បង់តាម ABA Mobile»។ ធនាគារផ្សេង៖ បើកកម្មវិធីធនាគារ រួចស្កេន QR ខាងលើ</li>
+        <li>បើប្រើទូរស័ព្ទតែមួយ៖ ចុច «រក្សាទុករូប QR» ឬថតអេក្រង់ រួចបើកពីវិចិត្រសាលក្នុងកម្មវិធីធនាគារ</li>
+        <li>ពិនិត្យឈ្មោះអ្នកទទួល និងចំនួនទឹកប្រាក់ រួចបង់</li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <h2>៤. ផ្ញើរូបថតវិក័យបត្របង់ប្រាក់</h2>
+      <p class="notice" style="margin:0 0 12px">កម្មង់របស់អ្នកនឹងត្រូវកត់ត្រា លុះត្រាតែអ្នកផ្ញើរូបវិក័យបត្រនៅទីនេះ</p>
+      <input type="file" id="receipt" accept="image/*">
+      <div class="err" id="err2"></div>
+      <button class="btn" id="btnUpload">ផ្ញើវិក័យបត្រ</button>
+    </div>
+  </section>
+
+  <!-- ជំហាន ៣៖ រួចរាល់ -->
+  <section id="step3" class="hide">
+    <div class="card ok">
+      <div class="tick">✓</div>
+      <h2 style="font-size:19px">បានទទួលការកម្មង់របស់អ្នក</h2>
+      <p>យើងនឹងផ្ទៀងផ្ទាត់ការបង់ប្រាក់។ សូមរក្សាទុកប័ណ្ណខាងក្រោម (ឬថតអេក្រង់) ហើយបង្ហាញពេលមកទទួលអាវ។ សូមអរគុណ!</p>
+    </div>
+    <div class="card">
+      <h2>ប័ណ្ណទទួលអាវ</h2>
+      <table class="tk"><tbody id="tkBody"></tbody></table>
+      <button class="btn" id="btnTicket">រក្សាទុកប័ណ្ណទទួលអាវ</button>
+    </div>
+  </section>
+
+  <footer id="foot">មានបញ្ហា? ទំនាក់ទំនង <span id="contact"></span></footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+  // ── ភ្ជាប់ទៅ Google Apps Script ជា API (មិនប្រើ cookie របស់ Google → ដំណើរការលើគ្រប់ទូរស័ព្ទ)
+  var API = 'https://script.google.com/macros/s/AKfycbxap0BuOUWiasA7EZJQ3gPk3uh7zK6jOHW0fBiKZAY4loJEIqA2WoysicgdtXD9aybvZw/exec';
+  function call(action, args) {
+    return fetch(API, { method: 'POST', redirect: 'follow', credentials: 'omit',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: action, args: args || [] }) })
+      .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .then(function (j) { if (!j || !j.ok) throw new Error((j && j.error) || 'មានបញ្ហា សូមព្យាយាមម្តងទៀត'); return j.data; });
+  }
+  function Runner() { this.s = function () {}; this.f = function () {}; }
+  Runner.prototype.withSuccessHandler = function (f) { this.s = f; return this; };
+  Runner.prototype.withFailureHandler = function (f) { this.f = f; return this; };
+  ['submitOrder', 'uploadReceipt', 'staffList', 'staffAction'].forEach(function (n) {
+    Runner.prototype[n] = function () { var a = [].slice.call(arguments), t = this; call(n, a).then(function (d) { t.s(d); }, function (e) { t.f(e); }); };
+  });
+  var google = { script: {} };
+  Object.defineProperty(google.script, 'run', { get: function () { return new Runner(); } });
+</script>
+<script>
+function boot(CFG) {
+  var qty = {}, order = null;
+  var $ = function (id) { return document.getElementById(id); };
+
+  function money(n) {
+    return CFG.currency === 'KHR'
+      ? Math.round(n).toLocaleString('en-US') + ' ៛'
+      : '$' + Number(n).toFixed(2);
+  }
+  function totalQty() { return CFG.sizes.reduce(function (a, s) { return a + qty[s]; }, 0); }
+  function refresh() {
+    var t = totalQty();
+    $('totalQty').textContent = t;
+    $('totalAmt').textContent = money(t * CFG.price);
+  }
+  function show(step) {
+    ['step1', 'step2', 'step3'].forEach(function (s) { $(s).classList.toggle('hide', s !== step); });
+    window.scrollTo(0, 0);
+  }
+  function cleanErr(e) { return String((e && e.message) || e).replace(/^Error:\s*/, ''); }
+
+  // ── ចាប់ផ្តើម
+  $('title').textContent = CFG.eventName;
+  $('priceLine').textContent = 'តម្លៃ ' + money(CFG.price) + ' ក្នុង ១ អាវ';
+  if (CFG.abaLink) { $('btnAba').href = CFG.abaLink; $('btnAba').classList.remove('hide'); }
+  if (CFG.contact) $('contact').textContent = CFG.contact; else $('foot').style.display = 'none';
+  CFG.sizes.forEach(function (s) {
+    qty[s] = 0;
+    var row = document.createElement('div');
+    row.className = 'size-row';
+    row.innerHTML = '<span class="size-name">' + s + '</span><div class="stepper">'
+      + '<button type="button" aria-label="ដក">−</button><span>0</span><button type="button" aria-label="បូក">+</button></div>';
+    var b = row.querySelectorAll('button'), n = row.querySelector('.stepper span');
+    b[0].onclick = function () { if (qty[s] > 0) { qty[s]--; n.textContent = qty[s]; refresh(); } };
+    b[1].onclick = function () { if (totalQty() < CFG.maxQty) { qty[s]++; n.textContent = qty[s]; refresh(); } };
+    $('sizes').appendChild(row);
+  });
+  refresh();
+
+  // ── ជំហាន ១ → ២
+  $('btnSubmit').onclick = function () {
+    var name = $('name').value.trim(), phone = $('phone').value.replace(/[^\d+]/g, '');
+    $('err1').textContent = '';
+    if (name.length < 2) { $('err1').textContent = 'សូមបញ្ចូលឈ្មោះ'; return; }
+    if (!/^\+?\d{8,14}$/.test(phone)) { $('err1').textContent = 'លេខទូរស័ព្ទមិនត្រឹមត្រូវ'; return; }
+    if (totalQty() < 1) { $('err1').textContent = 'សូមជ្រើសរើសយ៉ាងហោចណាស់អាវ ១'; return; }
+    var btn = this; btn.disabled = true; btn.textContent = 'កំពុងរក្សាទុក…';
+    google.script.run
+      .withSuccessHandler(function (res) {
+        order = res; order.phone = phone;
+        $('mName').textContent = CFG.merchantName;
+        $('mAmt').textContent = CFG.currency === 'KHR' ? Math.round(res.amount).toLocaleString('en-US') : Number(res.amount).toFixed(2);
+        $('mCur').textContent = res.currency;
+        $('orderId').textContent = res.orderId;
+        $('orderQty').textContent = res.totalQty;
+        $('expMin').textContent = CFG.expireMinutes;
+        if (CFG.staticQr) {
+          $('expLine').classList.add('hide');
+          $('staticNote').textContent = 'ក្រោយស្កេន សូមវាយបញ្ចូលចំនួន ' + money(res.amount) + ' ដោយខ្លួនឯង ហើយសរសេរលេខកម្មង់ ' + res.orderId + ' ក្នុងចំណាំ (Remark)';
+          $('staticNote').classList.remove('hide');
+        }
+        $('qr').innerHTML = '';
+        new QRCode($('qr'), { text: res.khqr, width: 420, height: 420, correctLevel: QRCode.CorrectLevel.M });
+        show('step2');
+      })
+      .withFailureHandler(function (e) {
+        $('err1').textContent = cleanErr(e);
+        btn.disabled = false; btn.textContent = 'បន្តទៅបង់ប្រាក់';
+      })
+      .submitOrder({ name: name, phone: phone, note: $('note').value, qty: qty });
+  };
+
+  // ── រក្សាទុករូប QR (សម្រាប់អ្នកប្រើទូរស័ព្ទតែមួយ)
+  $('btnSave').onclick = function () {
+    var src = $('qr').querySelector('canvas');
+    if (!src) return;
+    var c = document.createElement('canvas'); c.width = 600; c.height = 760;
+    var x = c.getContext('2d');
+    x.fillStyle = '#fff'; x.fillRect(0, 0, 600, 760);
+    x.fillStyle = '#e1232e'; x.fillRect(0, 0, 600, 80);
+    x.fillStyle = '#fff'; x.font = 'bold 38px Arial'; x.textAlign = 'center'; x.fillText('KHQR', 300, 54);
+    x.fillStyle = '#000'; x.textAlign = 'left';
+    x.font = '24px Arial'; x.fillText(CFG.merchantName, 60, 130);
+    x.font = 'bold 44px Arial'; x.fillText($('mAmt').textContent + ' ' + order.currency, 60, 185);
+    x.font = '22px Arial'; x.fillStyle = '#555'; x.fillText(order.orderId, 60, 222);
+    x.drawImage(src, 90, 270, 420, 420);
+    var a = document.createElement('a');
+    a.href = c.toDataURL('image/png'); a.download = 'KHQR-' + order.orderId + '.png';
+    document.body.appendChild(a); a.click(); a.remove();
+  };
+
+  // ── ប័ណ្ណទទួលអាវ (បង្ហាញក្រោយផ្ញើវិក័យបត្រ)
+  function ticketRows() {
+    var o = JSON.parse(order.payload), sizes = [];
+    CFG.sizes.forEach(function (s, i) { if (o.qtys[i] > 0) sizes.push(s + ' × ' + o.qtys[i]); });
+    return [['លេខកម្មង់', o.id], ['ឈ្មោះ', o.name], ['លេខទូរស័ព្ទ', o.phone], ['ទំហំ', sizes.join(', ')],
+      ['ចំនួនអាវ', String(o.totalQty)], ['ទឹកប្រាក់', money(o.amount)], ['កាលបរិច្ឆេទ', o.time]];
+  }
+  function fillTicket() {
+    $('tkBody').innerHTML = '';
+    ticketRows().forEach(function (r) {
+      var tr = document.createElement('tr'), a = document.createElement('td'), b = document.createElement('td');
+      a.textContent = r[0]; b.textContent = r[1]; tr.appendChild(a); tr.appendChild(b); $('tkBody').appendChild(tr);
+    });
+  }
+  $('btnTicket').onclick = function () {
+    var rows = ticketRows(), W = 720, H = 226 + rows.length * 64 + 130;
+    var c = document.createElement('canvas'); c.width = W; c.height = H;
+    var x = c.getContext('2d'), F = "'Kantumruy Pro','Khmer OS Battambang',sans-serif";
+    x.fillStyle = '#fff'; x.fillRect(0, 0, W, H);
+    x.fillStyle = '#b3261e'; x.fillRect(0, 0, W, 150);
+    x.fillStyle = '#e8a917'; x.fillRect(0, 150, W, 6);
+    x.fillStyle = '#fff'; x.textAlign = 'center';
+    x.font = '700 34px ' + F; x.fillText('ប័ណ្ណទទួលអាវ', W / 2, 66);
+    x.font = '400 24px ' + F; x.fillText(CFG.eventName, W / 2, 114, W - 60);
+    x.textAlign = 'left';
+    rows.forEach(function (r, i) {
+      var y = 226 + i * 64;
+      x.fillStyle = '#6b635a'; x.font = '400 24px ' + F; x.fillText(r[0], 50, y);
+      x.fillStyle = '#1f1b16'; x.font = (i === 0 ? '700 34px ' : '600 26px ') + F; x.fillText(r[1], 280, y, W - 330);
+      x.fillStyle = '#e7dfd3'; x.fillRect(50, y + 20, W - 100, 1);
+    });
+    var y2 = 226 + rows.length * 64 + 20;
+    x.fillStyle = '#fff4d6'; x.fillRect(50, y2 - 36, W - 100, 88);
+    x.fillStyle = '#8c1d17'; x.textAlign = 'center'; x.font = '600 22px ' + F;
+    x.fillText('បានផ្ញើវិក័យបត្រ · រង់ចាំផ្ទៀងផ្ទាត់', W / 2, y2);
+    x.fillText('សូមបង្ហាញប័ណ្ណនេះពេលមកទទួលអាវ', W / 2, y2 + 34);
+    var a = document.createElement('a');
+    a.href = c.toDataURL('image/png'); a.download = 'Ticket-' + order.orderId + '.png';
+    document.body.appendChild(a); a.click(); a.remove();
+  };
+
+  // ── ផ្ញើវិក័យបត្រ
+  function shrink(file, cb, fail) {
+    var img = new Image(), url = URL.createObjectURL(file);
+    img.onload = function () {
+      var k = Math.min(1, 1400 / Math.max(img.width, img.height));
+      var c = document.createElement('canvas');
+      c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      URL.revokeObjectURL(url);
+      cb(c.toDataURL('image/jpeg', 0.8));
+    };
+    img.onerror = function () { fail('មិនអាចអានរូបភាពនេះបានទេ'); };
+    img.src = url;
+  }
+  $('btnUpload').onclick = function () {
+    var f = $('receipt').files[0], btn = this;
+    $('err2').textContent = '';
+    if (!f) { $('err2').textContent = 'សូមជ្រើសរើសរូបថតវិក័យបត្រ'; return; }
+    btn.disabled = true; btn.textContent = 'កំពុងផ្ញើ…';
+    var fail = function (e) { $('err2').textContent = cleanErr(e); btn.disabled = false; btn.textContent = 'ផ្ញើវិក័យបត្រ'; };
+    shrink(f, function (dataUrl) {
+      google.script.run
+        .withSuccessHandler(function () { fillTicket(); show('step3'); })
+        .withFailureHandler(fail)
+        .uploadReceipt(order.payload, order.sig, dataUrl);
+    }, fail);
+  };
+}
+  call('config', []).then(function (cfg) {
+    document.getElementById('loading').classList.add('hide');
+    document.getElementById('step1').classList.remove('hide');
+    boot(cfg);
+  }, function () {
+    var l = document.getElementById('loading');
+    l.textContent = 'មិនអាចភ្ជាប់បានទេ។ សូមពិនិត្យអ៊ីនធឺណិត រួចចុចទីនេះដើម្បីព្យាយាមម្តងទៀត';
+    l.style.cursor = 'pointer'; l.onclick = function () { location.reload(); };
+  });
+</script>
+</body>
+</html>
