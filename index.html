@@ -310,7 +310,10 @@ function boot(CFG) {
     var fail = function (e) { $('err2').textContent = cleanErr(e); btn.disabled = false; btn.textContent = 'ផ្ញើវិក័យបត្រ'; };
     shrink(f, function (dataUrl) {
       google.script.run
-        .withSuccessHandler(function () { fillTicket(); show('step3'); })
+        .withSuccessHandler(function (r) {
+          if (r && r.id && r.id !== order.orderId) { var p = JSON.parse(order.payload); p.id = r.id; order.payload = JSON.stringify(p); order.orderId = r.id; }
+          fillTicket(); show('step3');
+        })
         .withFailureHandler(fail)
         .uploadReceipt(order.payload, order.sig, dataUrl);
     }, fail);
