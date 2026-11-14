@@ -4,6 +4,7 @@
 <title>ចុះឈ្មោះទិញអាវសង្ក្រាន្ត ២០២៧</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta charset="utf-8">
+<link rel="preconnect" href="https://songkran-shirt-api.cafe-shop.workers.dev">
 <link rel="preconnect" href="https://script.google.com">
 <link rel="preconnect" href="https://script.googleusercontent.com">
 <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -141,11 +142,24 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
   // ── ភ្ជាប់ទៅ Google Apps Script ជា API (មិនប្រើ cookie របស់ Google → ដំណើរការលើគ្រប់ទូរស័ព្ទ)
-  var API = 'https://script.google.com/macros/s/AKfycbxap0BuOUWiasA7EZJQ3gPk3uh7zK6jOHW0fBiKZAY4loJEIqA2WoysicgdtXD9aybvZw/exec';
+  // ផ្លូវទី១៖ Cloudflare (ទូរស័ព្ទមិនចាំបាច់ភ្ជាប់ Google ផ្ទាល់) · ផ្លូវទី២ (បម្រុង)៖ Google ផ្ទាល់
+  var APIS = ['https://songkran-shirt-api.cafe-shop.workers.dev',
+    'https://script.google.com/macros/s/AKfycbxap0BuOUWiasA7EZJQ3gPk3uh7zK6jOHW0fBiKZAY4loJEIqA2WoysicgdtXD9aybvZw/exec'];
+  var CALL_TIMEOUT = 30000;
+  var SLOW_MSG = 'ការភ្ជាប់យឺតពេក ឬដាច់។ សូមពិនិត្យអ៊ីនធឺណិត ហើយចុចម្តងទៀត';
+  function post(url, body) {
+    var ctl = window.AbortController ? new AbortController() : null;
+    var timer = setTimeout(function () { if (ctl) ctl.abort(); }, CALL_TIMEOUT);
+    return fetch(url, { method: 'POST', redirect: 'follow', credentials: 'omit', signal: ctl ? ctl.signal : undefined,
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: body })
+      .then(function (r) { clearTimeout(timer); if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); },
+        function (e) { clearTimeout(timer); throw e; });
+  }
   function call(action, args) {
-    return fetch(API, { method: 'POST', redirect: 'follow', credentials: 'omit',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: action, args: args || [] }) })
-      .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+    var body = JSON.stringify({ action: action, args: args || [] });
+    return post(APIS[0], body)
+      .catch(function (e) { if (e && e.name === 'AbortError') throw e; return post(APIS[1], body); })
+      .catch(function (e) { throw new Error(e && e.name === 'AbortError' ? SLOW_MSG : 'មិនអាចភ្ជាប់បានទេ។ សូមពិនិត្យអ៊ីនធឺណិត ហើយចុចម្តងទៀត'); })
       .then(function (j) { if (!j || !j.ok) throw new Error((j && j.error) || 'មានបញ្ហា សូមព្យាយាមម្តងទៀត'); return j.data; });
   }
   function Runner() { this.s = function () {}; this.f = function () {}; }
